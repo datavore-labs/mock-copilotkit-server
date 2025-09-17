@@ -1,0 +1,156 @@
+[
+    {
+      "name": "TRANSACTION_SOURCE",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "UPC",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "BRAND_NAME",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "PRIMARY_CATEGORY",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "SECONDARY_CATEGORY",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "PRODUCT_NAME",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "RETAILER_CHANNEL",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "NUM_RECORDS",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "SUM_QUANTITY",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "SUM_PRICE",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "SUM_BASKET_TOTAL",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "SUM_QUANTITY_PRICE",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "MIN_PURCHASE_DATE",
+      "mode": "NULLABLE",
+      "type": "DATE",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "MAX_PURCHASE_DATE",
+      "mode": "NULLABLE",
+      "type": "DATE",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "NUM_RECEIPT_IDS",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "GTIN14",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "AD_PRODUCT_NAME",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "AD_BRAND_NAME",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "AD_SUB_BRAND_NAME",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "AD_PARENT_COMPANY",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "AD_CATEGORY_COMBINED",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "ENHANCEMENT_LEVEL",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": "",
+      "fields": []
+    }
+  ]

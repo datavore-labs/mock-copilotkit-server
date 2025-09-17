@@ -1,0 +1,105 @@
+[project]
+name = "mock-copilotkit-server"
+version = "0.1.0"
+description = "Mock CopilotKit Server"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    {name = "Above Data", email = "info@abovedata.io"}
+]
+dependencies = [
+    "fastapi==0.115.14",
+    "uvicorn[standard]==0.35.0",
+    "copilotkit==0.1.54",
+    "pydantic==2.11.7",
+    "python-multipart==0.0.20",
+    "pydantic-settings>=2.10.1",
+    "google-cloud-bigquery>=3.37.0",
+    "gcloud>=0.18.3",
+    "polars>=1.33.1",
+]
+
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.3.0",
+    "pytest>=8.4.2",
+    "pytest>=7.4.0",
+    "ruff>=0.3.0",
+    "mypy>=1.5.0",
+]
+local-dev = [
+    "db-dtypes>=1.4.3",
+    "ipykernel>=6.30.1",
+    "jupyter>=1.1.1",
+    "pandas>=2.3.2",
+    "tqdm>=4.67.1",
+]
+
+
+[build-system]
+requires = ["uv_build>=0.8.0,<0.9"]
+build-backend = "uv_build"
+
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+select = ["E", "F", "I", "N", "W", "B", "C4", "ARG", "SIM", "ERA", "PL", "RUF"]
+ignore = []
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+skip-magic-trailing-comma = false
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+
+# Can't have basedpyright and pyright configs in the same file.
+# Consider removing and relying on local config instead,
+# or moving to a separate .cursor/.settings.json
+# These were copied and pasted over from another project and may not be entirely applicable.
+
+[tool.basedpyright]
+include = ["src"]
+exclude = ["**/node_modules",
+    "**/__pycache__",
+    "src/experimental",
+    "src/typestubs",
+]
+typeCheckingMode = "basic"
+strictListInference = true
+strictDictionaryInference = true
+reportGeneralTypeIssues = "error"
+reportPropertyTypeMismatch = "error"
+reportUndefinedVariable = "error"
+reportUnknownMemberType = "warning"
+reportUnknownVariableType = "warning"
+reportMissingModuleSource = "error"
+reportUnknownParameterType = "warning"
+reportCallIssue = "error"              # Will catch incorrect function calls
+reportArgumentType = "error"           # Will catch argument type mismatches
+strictParameterNoneValue = true        # More strict parameter checking
+reportMissingParameterType = "error"   # Ensures all parameters have type hints
+reportFunctionMemberAccess = "error"   # Catches incorrect function member access
+reportMissingTypeStubs = false         # BasedPyright config
+reportAny = false
+reportImplicitOverride = false
+reportUnannotatedClassAttribute = false
+reportUntypedBaseClass = false
+reportUnusedCallResult = false # only used in basedpyright in my local
+reportUntypedFunctionDecorator = false
+
+
+[tool.pytest]
+testpaths = ["tests"]
+python_files = "test_*.py"

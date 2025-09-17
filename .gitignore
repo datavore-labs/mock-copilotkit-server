@@ -8,3 +8,8 @@ venv/
 .env.test
 .env.production
 __pycache__/
+
+notes
+sample_data
+
+.DS_Store

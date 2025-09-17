@@ -1,0 +1,21 @@
+{
+    "notebook.formatOnSave.enabled": true,
+    "notebook.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll": "explicit"
+    },
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll": "explicit"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.wordWrapColumn": 80,
+    },
+    "files.exclude": {
+        "**/__pycache__": true,
+    },
+    "files.autoSave": "afterDelay",
+}

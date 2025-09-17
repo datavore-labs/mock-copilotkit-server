@@ -2,11 +2,11 @@ steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/copilotkit-server', '.']
-    
+
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/copilotkit-server']
-    
+
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -25,4 +25,4 @@ steps:
     - '8080'
 
 images:
-  - 'gcr.io/$PROJECT_ID/copilotkit-server' 
+  - 'gcr.io/$PROJECT_ID/copilotkit-server'
