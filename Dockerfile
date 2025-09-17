@@ -32,8 +32,5 @@ EXPOSE 8080
 ENV PYTHONPATH=/app
 ENV PORT=8080
 
-# Reset the entrypoint, don't invoke `uv`
-ENTRYPOINT []
-
 # Run the application
-# CMD exec uvicorn server:app --host 0.0.0.0 --port $PORT --workers 1
+CMD exec uv run uvicorn server:app --host 0.0.0.0 --port $PORT --workers 1
