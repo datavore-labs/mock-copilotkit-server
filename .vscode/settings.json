@@ -18,4 +18,5 @@
         "**/__pycache__": true,
     },
     "files.autoSave": "afterDelay",
+    "cursorpyright.analysis.typeCheckingMode": "standard"
 }

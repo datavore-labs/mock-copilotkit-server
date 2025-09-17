@@ -31,6 +31,7 @@ Thumbs.db
 # Project folders.
 sample_data
 notes
+tests/
 
 # IDE
 .vscode/
@@ -38,3 +39,5 @@ notes
 *.swp
 *.swo
 *~
+
+.venv

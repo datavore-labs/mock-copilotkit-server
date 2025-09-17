@@ -57,6 +57,24 @@ run: clean build
 	@echo "Container running at http://localhost:8080"
 
 
+live-tests:
+	uv run behave tests/live-tests/features/
+
+live-tests-verbose:
+	uv run behave tests/live-tests/features/ -v
+
+live-tests-docker: clean build
+	@echo "Removing existing test container if it exists..."
+	-docker stop $(SERVICE_NAME)-test 2>/dev/null || true
+	-docker rm $(SERVICE_NAME)-test 2>/dev/null || true
+	docker run -d --name $(SERVICE_NAME)-test -p 8000:8000 $(LOCAL_IMAGE)
+	@echo "Waiting for container to start..."
+	@sleep 5
+	COPILOTKIT_SERVER_URL=http://localhost:8000 uv run behave tests/live-tests/features/
+	docker stop $(SERVICE_NAME)-test
+	docker rm $(SERVICE_NAME)-test
+
+
 unit-tests:
 	uv run pytest tests/unit-tests
 
