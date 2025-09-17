@@ -8,11 +8,14 @@ import os
 import polars as pl
 from google.cloud import bigquery
 
+from mock_copilotkit_server.config import config
 
-# TODO - add credentials to bigquery client otherwise will fallback to
-# environment, which will fail on a non-local machine.
+
 def get_bigquery_client(project_id: str) -> bigquery.Client:
-    """Get a BigQuery client."""
+    """Get a BigQuery client.
+
+    Uses credentials from GOOGLE_APPLICATION_CREDENTIALS environment variable.
+    """
     return bigquery.Client(project=project_id)
 
 
@@ -21,8 +24,9 @@ def get_bigquery_client(project_id: str) -> bigquery.Client:
 ########################################################
 
 
-def read_in_table(client: bigquery.Client, table_name: str) -> pl.DataFrame:
+def read_in_table(table_name: str) -> pl.DataFrame:
     if not os.path.exists(f"stores/df_{table_name}.parquet"):
+        client = get_bigquery_client(config.bigquery_project_id)
         table = client.query_and_wait(
             f"SELECT * FROM `audience-builder-tintash.retail_transactions_enhanced.{table_name}`"
         )

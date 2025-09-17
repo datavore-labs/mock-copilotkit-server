@@ -28,6 +28,10 @@ coverage.xml
 ehthumbs.db
 Thumbs.db
 
+# Project folders.
+sample_data
+notes
+
 # IDE
 .vscode/
 .idea/

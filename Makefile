@@ -20,7 +20,7 @@ setup:
 .PHONY: build
 build:
 	@echo "Building Docker image locally..."
-	docker build -t $(LOCAL_IMAGE) .
+	docker buildx build --platform linux/amd64 --cache-from $(GCR_IMAGE) --load -t $(LOCAL_IMAGE) .
 	docker tag $(LOCAL_IMAGE) $(GCR_IMAGE)
 	@echo "Build complete: $(GCR_IMAGE)"
 
@@ -37,6 +37,24 @@ deploy:
 	@echo "Deploying using Cloud Build..."
 	gcloud builds submit --config cloudbuild.yaml --project=$(PROJECT_ID)
 	@echo "Deployment complete!"
+
+
+# Clean up local Docker images
+.PHONY: clean
+clean:
+	@echo "Cleaning up local Docker images..."
+	-docker rmi $(LOCAL_IMAGE) $(GCR_IMAGE)
+	@echo "Cleanup complete!"
+
+# Local development commands
+.PHONY: run
+run: clean build
+	docker run -d \
+		--name $(SERVICE_NAME)-local \
+		-p 8080:8080 \
+		-e OPENAI_API_KEY=${OPENAI_API_KEY} \
+		$(LOCAL_IMAGE)
+	@echo "Container running at http://localhost:8080"
 
 
 unit-tests:

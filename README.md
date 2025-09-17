@@ -5,6 +5,7 @@ Mock copilot server using the copilotkit framework.
 To Do:
 
 1. Setup machine credentials for Bigquery connection.
+    - https://cloud.google.com/bigquery/docs/authentication
 2. Get schema input/output for brand graph, add empty code within service flow.
 
 

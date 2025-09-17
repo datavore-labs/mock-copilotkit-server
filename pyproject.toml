@@ -17,6 +17,7 @@ dependencies = [
     "google-cloud-bigquery>=3.37.0",
     "gcloud>=0.18.3",
     "polars>=1.33.1",
+    "pandas>=2.3.2",
 ]
 
 

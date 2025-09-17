@@ -189,7 +189,7 @@ create_audience_action = CopilotAction(
         {
             "name": "audience_data",
             "type": "object",
-            "description": "Complete audience data including insights, ingredients," " exclusions, and filters",
+            "description": "Complete audience data including insights, ingredients, exclusions, and filters",
             "required": True,
         },
     ],
@@ -211,15 +211,15 @@ def test_copilotkit_actions():
     try:
         # Test getPurchaseRecencyData
         result_purchase: PurchaseRecencyData = handle_get_purchase_recency_data(category="cookies")
-        logger.info(f"✅ [STARTUP TEST] getPurchaseRecencyData works: {len(result_purchase.data)} periods")
+        logger.info(f"✅ [STARTUP TEST] getPurchaseRecencyData works: {len(result_purchase)} periods")
 
         # Test getBrandData
         result_brand: BrandData = handle_get_brand_data(category="cookies", selected_recency="last_30_days")
-        logger.info(f"✅ [STARTUP TEST] getBrandData works: {len(result_brand.data)} brands")
+        logger.info(f"✅ [STARTUP TEST] getBrandData works: {len(result_brand)} brands")
 
         # Test getSpendingData
         result_spending: SpendingData = handle_get_spending_data(category="cookies", selected_brands=["Oreo"])
-        logger.info(f"✅ [STARTUP TEST] getSpendingData works: {len(result_spending.data)} ranges")
+        logger.info(f"✅ [STARTUP TEST] getSpendingData works: {len(result_spending)} ranges")
 
         logger.info("✅ [STARTUP TEST] All actions working correctly!")
     except Exception as e:

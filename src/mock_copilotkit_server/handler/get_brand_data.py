@@ -7,7 +7,6 @@ from pydantic import BaseModel, computed_field
 from mock_copilotkit_server.client.bigquery_client import (
     find_and_filter_to_largest_match_category,
     find_largest_n_brands_by_category,
-    get_bigquery_client,
     read_in_table,
 )
 from mock_copilotkit_server.client.mock_data_client import get_mock_brand_data
@@ -15,8 +14,6 @@ from mock_copilotkit_server.config import config
 from mock_copilotkit_server.service import log_params, log_result
 
 logger = logging.getLogger(__name__)
-
-client = get_bigquery_client(config.bigquery_project_id)
 
 
 class BrandData(BaseModel):
@@ -41,7 +38,7 @@ class BrandData(BaseModel):
 
 
 def get_live_brand_data(category: str) -> list[dict[str, str | int | float]]:
-    df_brand_perf = read_in_table(client, "brand_performance_by_category_20250724")
+    df_brand_perf = read_in_table("brand_performance_by_category_20250724")
     df_cat_match = find_and_filter_to_largest_match_category(df_brand_perf, category)
     top_10_brands = find_largest_n_brands_by_category(df_cat_match, 10)
 

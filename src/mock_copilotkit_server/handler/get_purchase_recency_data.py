@@ -6,7 +6,6 @@ from pydantic import BaseModel, computed_field
 
 from mock_copilotkit_server.client.bigquery_client import (
     find_and_filter_to_largest_match_category,
-    get_bigquery_client,
     read_in_table,
 )
 from mock_copilotkit_server.client.mock_data_client import (
@@ -16,8 +15,6 @@ from mock_copilotkit_server.config import config
 from mock_copilotkit_server.service import log_params, log_result
 
 logger = logging.getLogger(__name__)
-
-client = get_bigquery_client(config.bigquery_project_id)
 
 
 class PurchaseRecencyData(BaseModel):
@@ -45,7 +42,7 @@ class PurchaseRecencyData(BaseModel):
 
 
 def get_live_purchase_recency_data(category: str) -> list[dict[str, str | int | float]]:
-    df_purchase_recency = read_in_table(client, "purchase_recency_20250724")
+    df_purchase_recency = read_in_table("purchase_recency_20250724")
 
     data_filtered = find_and_filter_to_largest_match_category(df_purchase_recency, category)
 

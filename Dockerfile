@@ -33,4 +33,4 @@ ENV PYTHONPATH=/app
 ENV PORT=8080
 
 # Run the application
-CMD exec uv run uvicorn server:app --host 0.0.0.0 --port $PORT --workers 1
+CMD exec uv run uvicorn src.mock_copilotkit_server.server:app --host 0.0.0.0 --port $PORT --workers 1
