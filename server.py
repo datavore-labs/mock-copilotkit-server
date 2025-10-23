@@ -6,14 +6,20 @@ import json
 from datetime import datetime
 import logging
 import os
+import traceback
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 app = FastAPI(debug=True)
 
-    
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    logger.error(f"❌ [GLOBAL ERROR] {str(exc)}", exc_info=True)
+    traceback.print_exc()
+    return JSONResponse({"detail": str(exc)}, status_code=500)
 
 # Add a health check endpoint
 @app.get("/health")
