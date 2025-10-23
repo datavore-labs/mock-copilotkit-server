@@ -13,8 +13,6 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(debug=True)
 
-for route in app.router.routes:
-    print("🚦 [FASTAPI ROUTE]", getattr(route, 'path', str(route)), getattr(route, 'methods', ''))
     
 
 # Add a health check endpoint
@@ -450,7 +448,21 @@ def test_actions():
         logger.error(f"❌ [STARTUP TEST] Action test failed: {str(e)}")
 
 # Add the CopilotKit endpoint to your FastAPI app 
-add_fastapi_endpoint(app, sdk, "/copilotkit_remote")
+        
+try:
+    add_fastapi_endpoint(app, sdk, "/copilotkit_remote")
+    print("✅ [SETUP] CopilotKit endpoint added successfully")
+except Exception as e:
+    print(f"❌ [SETUP] Failed to add CopilotKit endpoint: {e}")
+    import traceback
+    traceback.print_exc()
+
+# troubleshooting the fastapi server - list all the routes
+print("\n🚦 [ROUTES] Registered FastAPI routes:")
+for route in app.router.routes:
+    print(f"  - {getattr(route, 'path', str(route))} {getattr(route, 'methods', '')}")
+print()
+
 
 # Add middleware to log all requests
 @app.middleware("http")
