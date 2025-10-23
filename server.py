@@ -17,8 +17,8 @@ app = FastAPI(debug=True)
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):
-    logger.error(f"❌ [GLOBAL ERROR] {str(exc)}", exc_info=True)
-    logger.error(f"❌ [TRACEBACK]:\n {traceback.format_exc()}")
+    logger.error(f"❌ [GLOBAL ERROR] {str(exc)}")
+    logger.error(f"❌ [TRACEBACK]:\n{traceback.format_exc()}")
     return JSONResponse(
         {"detail": str(exc), "type": type(exc).__name__},
         status_code=500
