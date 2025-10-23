@@ -13,6 +13,10 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(debug=True)
 
+for route in app.router.routes:
+    print("🚦 [FASTAPI ROUTE]", getattr(route, 'path', str(route)), getattr(route, 'methods', ''))
+    
+
 # Add a health check endpoint
 @app.get("/health")
 async def health_check():
