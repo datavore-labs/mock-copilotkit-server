@@ -18,8 +18,11 @@ app = FastAPI(debug=True)
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):
     logger.error(f"❌ [GLOBAL ERROR] {str(exc)}", exc_info=True)
-    traceback.print_exc()
-    return JSONResponse({"detail": str(exc)}, status_code=500)
+    logger.error(f"❌ [TRACEBACK]:\n {traceback.format_exc()}")
+    return JSONResponse(
+        {"detail": str(exc), "type": type(exc).__name__},
+        status_code=500
+    )
 
 # Add a health check endpoint
 @app.get("/health")
@@ -35,6 +38,7 @@ async def root():
 
 # Mock data functions for different categories
 def get_purchase_recency_data(category: str) -> List[Dict]:
+    
     """Get purchase recency data for a specific category"""
     logger.info(f"📊 [DATA GENERATION] Generating purchase recency data for category: {category}")
     
