@@ -1,4 +1,7 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
 from copilotkit.integrations.fastapi import add_fastapi_endpoint
 from copilotkit import CopilotKitRemoteEndpoint, Action as CopilotAction
 from typing import Dict, List, Optional
@@ -14,6 +17,15 @@ logger = logging.getLogger(__name__)
 
 
 app = FastAPI(debug=True)
+
+# middleware to register CORS headers
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://audience-builder-demo-v2-fe-vz5cg6nm5a-uc.a.run.app"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):
@@ -35,6 +47,13 @@ async def health_check():
 async def root():
     logger.info("🌐 [ROOT] Root endpoint called")
     return {"message": "CopilotKit Server is running", "actions": len(sdk.actions)}
+
+@app.post("/test-action")
+async def test_action():
+    logger.info("🧪 [TEST] Test action called!")
+    return {"message": "Test action works!", "timestamp": datetime.now().isoformat()}
+
+
 
 # Mock data functions for different categories
 def get_purchase_recency_data(category: str) -> List[Dict]:
@@ -152,14 +171,14 @@ def get_spending_data(category: str) -> List[Dict]:
     ]
     
     # Adjust ranges based on category
-    if category.lower() in ["premium", "luxury"]:
+    if category.lower() in ["cosmetics"]:
         result = [
             {"range": "$25-50", "count": 5000, "percentage": 20},
             {"range": "$50-100", "count": 10000, "percentage": 40},
             {"range": "$100-200", "count": 7000, "percentage": 28},
             {"range": "$200+", "count": 3000, "percentage": 12},
         ]
-    elif category.lower() in ["snacks", "beverages"]:
+    elif category.lower() in ["cookies"]:
         result = [
             {"range": "$0-5", "count": 12000, "percentage": 35},
             {"range": "$5-15", "count": 15000, "percentage": 44},
@@ -173,7 +192,7 @@ def get_spending_data(category: str) -> List[Dict]:
             {"range": "$25-50", "count": 6000000, "percentage": 25.4},
             {"range": "$50+", "count": 3000000, "percentage": 19.8},
         ]
-    elif category.lower() in ["cosmetics"]:
+    elif category.lower() in ["beverages", "snacks"]:
         result = [
             {"range": "$0-10", "count": 15000000, "percentage": 22.7},
             {"range": "$10-25", "count": 10000000, "percentage": 32.1},
@@ -205,7 +224,7 @@ def handle_get_purchase_recency_data(**kwargs):
             "category": category,
             "total_consumers": total_consumers,
             "title": f"Purchase Recency Distribution",
-            "description": f"Analysis of consumers who purchased {category} in the last 30 days and their purchase recency distribution."
+            "description": f"Analysis of consumers who purchased {category} and their purchase recency distribution."
         }
         
         logger.info(f"✅ [BACKEND ACTION] *** SUCCESSFULLY RETURNING DATA *** with {len(data)} periods")
@@ -231,7 +250,7 @@ def handle_get_brand_data(**kwargs):
             "category": category,
             "selected_recency": selected_recency,
             "title": f"{category.title()} Brand Breakdown",
-            "description": f"Brand distribution for {category} consumers in the selected audience."
+            "description": f"Brand distribution for {category} consumers in your audience."
         }
         
         logger.info(f"✅ [BACKEND ACTION] *** SUCCESSFULLY RETURNING DATA *** with {len(data)} brands")
@@ -257,7 +276,7 @@ def handle_get_spending_data(**kwargs):
             "category": category,
             "selected_brands": selected_brands or [],
             "title": f"Spending Distribution (Last 30 Days)",
-            "description": f"Spending patterns for {category} consumers in the selected audience."
+            "description": f"Spending patterns for {category} consumers your audience."
         }
         
         logger.info(f"✅ [BACKEND ACTION] *** SUCCESSFULLY RETURNING DATA *** with {len(data)} spending ranges")
