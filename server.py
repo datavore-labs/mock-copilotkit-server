@@ -559,9 +559,9 @@ print()
 # Add middleware to log all requests
 @app.middleware("http")
 async def log_requests(request, call_next):
-#   logger.info(f"📨 [REQUEST] {request.method} {request.url.path} - Headers: {dict(request.headers)}")
+   logger.info(f"📨 [REQUEST] {request.method} {request.url.path} - Headers: {dict(request.headers)}")
     response = await call_next(request)
-#   logger.info(f"📤 [RESPONSE] {response.status_code} for {request.url.path}")
+   logger.info(f"📤 [RESPONSE] {response.status_code} for {request.url.path}")
     return response
 
 def main():
