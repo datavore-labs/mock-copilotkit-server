@@ -48,10 +48,10 @@ async def root():
     logger.info("🌐 [ROOT] Root endpoint called")
     return {"message": "CopilotKit Server is running", "actions": len(sdk.actions)}
 
-@app.post("/test-action")
-async def test_action():
-    logger.info("🧪 [TEST] Test action called!")
-    return {"message": "Test action works!", "timestamp": datetime.now().isoformat()}
+#@app.post("/test-action")
+#async def test_action():
+#   logger.info("🧪 [TEST] Test action called!")
+#   return {"message": "Test action works!", "timestamp": datetime.now().isoformat()}
 
 
 
@@ -62,19 +62,51 @@ def get_purchase_recency_data(category: str) -> List[Dict]:
     logger.info(f"📊 [DATA GENERATION] Generating purchase recency data for category: {category}")
     
     # Updated purchase recency data with new periods and counts
-    base_data = [
-        {"period": "0-30 Days", "count": 710000, "percentage": 26.5},
-        {"period": "30-60 Days", "count": 830000, "percentage": 17.6},
-        {"period": "60-90 Days", "count": 690000, "percentage": 14.6},
-        {"period": "90-180 Days", "count": 1450000, "percentage": 9.5},
-    ]
     
+    if category.lower() in ["cosmetics"]:
+        base_data = [
+            {"period": "0-30 Days", "count": 954000, "percentage": 14.06},
+            {"period": "30-60 Days", "count": 1305000, "percentage": 19.24},
+            {"period": "60-90 Days", "count": 1684000, "percentage": 24.83},
+            {"period": "90-180 Days", "count": 2840000, "percentage": 41.87},
+        ]
+    elif category.lower() in ["cookies"]:
+        base_data = [
+            {"period": "0-30 Days", "count": 710000, "percentage": 19.29},
+            {"period": "30-60 Days", "count": 830000, "percentage": 22.55},
+            {"period": "60-90 Days", "count": 690000, "percentage": 18.75},
+            {"period": "90-180 Days", "count": 1450000, "percentage": 39.4},
+        ]
+    elif category.lower() in ["beer"]:
+        base_data = [
+            {"period": "0-30 Days", "count": 1284000, "percentage": 26.27},
+            {"period": "30-60 Days", "count": 854600, "percentage": 17.49},
+            {"period": "60-90 Days", "count": 980510, "percentage": 20.06},
+            {"period": "90-180 Days", "count": 1768000, "percentage": 36.18},
+        ]
+    elif category.lower() in ["beverages", "snacks"]:
+        base_data = [
+            {"period": "0-30 Days", "count": 6512000, "percentage": 15.22},
+            {"period": "30-60 Days", "count": 6824800, "percentage": 15.95},
+            {"period": "60-90 Days", "count": 7623000, "percentage": 17.81},
+            {"period": "90-180 Days", "count": 21840000, "percentage": 51.03},
+        ]
+    else:
+        base_data = [
+            {"period": "0-30 Days", "count": 710000, "percentage": 19.29},
+            {"period": "30-60 Days", "count": 830000, "percentage": 22.55},
+            {"period": "60-90 Days", "count": 690000, "percentage": 18.75},
+            {"period": "90-180 Days", "count": 1450000, "percentage": 39.4},
+        ]
+        
+    
+        
     # Adjust data based on category
-    multiplier = 1.0
-    if category.lower() in ["premium", "luxury"]:
-        multiplier = 0.6
-    elif category.lower() in ["snacks", "beverages", "beer"]:
-        multiplier = 1.4
+#   multiplier = 1.0
+#   if category.lower() in ["premium", "luxury"]:
+#       multiplier = 0.6
+#   elif category.lower() in ["snacks", "beverages", "beer"]:
+#       multiplier = 1.4
     
     result = [
         {
@@ -237,20 +269,46 @@ def handle_get_purchase_recency_data(**kwargs):
 def handle_get_brand_data(**kwargs):
     category = kwargs.get("category")
     selected_recency = kwargs.get("selected_recency")
+    selected_recency_percentage = kwargs.get("selected_recency_percentage", 100.0)
     logger.info(f"🚀 [BACKEND ACTION] *** getBrandData CALLED *** with category: {category}, selected_recency: {selected_recency}")
     logger.info(f"🔥 [BACKEND ACTION] *** THIS IS A BACKEND ACTION - LLM SHOULD CALL THIS ***")
     logger.info(f"📊 [BACKEND DATA] Getting brand data for {category}")
     
     try:
-        data = get_brand_data(category)
+        brand_data = get_brand_data(category)
+        
+        # 2. Get the *original* total consumer count from the recency data
+        all_recency_data = get_purchase_recency_data(category)
+        original_total_consumers = sum(item["count"] for item in all_recency_data)
+        
+        # 3. Calculate the new total_consumers based on the percentage
+        # Convert percentage (e.g., 44.1) to a factor (e.g., 0.441)
+        percentage_factor = selected_recency_percentage / 100.0
+        new_total_consumers = int(original_total_consumers * percentage_factor)
+        
+        logger.info(f"📊 [CALCULATION] Original total: {original_total_consumers}")
+        logger.info(f"📊 [CALCULATION] Percentage factor: {percentage_factor} (from {selected_recency_percentage}%)")
+        logger.info(f"📊 [CALCULATION] New total consumers: {new_total_consumers}")
+        
+        # 4. Scale brand data counts to match the new total
+        scaled_brand_data = [
+            {
+                "brand": item["brand"],
+                "count": int(item["count"] * percentage_factor), # Apply scaling factor
+                "percentage": item["percentage"] # Keep original percentage distribution
+            }
+            for item in brand_data
+        ]
         
         result = {
             "chart_type": "brand_breakdown",
-            "data": data,
+            "data": scaled_brand_data,
             "category": category,
             "selected_recency": selected_recency,
+            "selected_recency_percentage": selected_recency_percentage, # Pass back the percentage
+            "total_consumers": new_total_consumers, # <-- HERE IS THE NEW TOTAL
             "title": f"{category.title()} Brand Breakdown",
-            "description": f"Brand distribution for {category} consumers in your audience."
+            "description": f"Brand distribution for {new_total_consumers:,} {category} consumers in your audience."
         }
         
         logger.info(f"✅ [BACKEND ACTION] *** SUCCESSFULLY RETURNING DATA *** with {len(data)} brands")
@@ -312,6 +370,11 @@ get_brand_data_action = CopilotAction(
         "name": "selected_recency",
         "type": "string",
         "description": "Previously selected recency period",
+        "required": False
+    }, {
+        "name": "selected_recency_percentage",  # for calculating
+        "type": "number",                      
+        "description": "The combined percentage (0-100) of all selected recency periods.",
         "required": False
     }],
     handler=handle_get_brand_data
@@ -496,9 +559,9 @@ print()
 # Add middleware to log all requests
 @app.middleware("http")
 async def log_requests(request, call_next):
-    logger.info(f"📨 [REQUEST] {request.method} {request.url.path} - Headers: {dict(request.headers)}")
+#   logger.info(f"📨 [REQUEST] {request.method} {request.url.path} - Headers: {dict(request.headers)}")
     response = await call_next(request)
-    logger.info(f"📤 [RESPONSE] {response.status_code} for {request.url.path}")
+#   logger.info(f"📤 [RESPONSE] {response.status_code} for {request.url.path}")
     return response
 
 def main():
