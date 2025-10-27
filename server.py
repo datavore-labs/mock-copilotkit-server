@@ -111,7 +111,7 @@ def get_purchase_recency_data(category: str) -> List[Dict]:
     result = [
         {
             "period": item["period"],
-            "count": int(item["count"] * multiplier),
+            "count": item["count"],
             "percentage": item["percentage"]
         }
         for item in base_data
@@ -311,7 +311,7 @@ def handle_get_brand_data(**kwargs):
             "description": f"Brand distribution for {new_total_consumers:,} {category} consumers in your audience."
         }
         
-        logger.info(f"✅ [BACKEND ACTION] *** SUCCESSFULLY RETURNING DATA *** with {len(data)} brands")
+        logger.info(f"✅ [BACKEND ACTION] *** SUCCESSFULLY RETURNING DATA *** with {len(scaled_brand_data)} brands")
         logger.info(f"🎯 [BACKEND ACTION] Result: {result}")
         return result
     except Exception as e:
